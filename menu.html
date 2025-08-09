@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Unban WA, Telegram & Free Fire</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: radial-gradient(circle at top, #0a0a0a, #000);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+    .form-container {
+        background: rgba(30, 30, 30, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 25px 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+        width: 340px;
+        animation: slideFadeIn 1s ease;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    @keyframes slideFadeIn {
+        from {opacity: 0; transform: translateY(40px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 1.6em;
+        color: #ff0033;
+        letter-spacing: 1px;
+    }
+    label {
+        font-size: 0.9em;
+        color: #ccc;
+    }
+    .phone-input {
+        display: flex;
+        align-items: center;
+    }
+    .phone-input span {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 10px;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #ff0033;
+        font-weight: bold;
+    }
+    input, select, button {
+        width: 100%;
+        padding: 11px;
+        margin: 6px 0 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-size: 0.95em;
+        transition: all 0.3s ease;
+    }
+    input:focus, select:focus {
+        outline: none;
+        border-color: #ff0033;
+        box-shadow: 0 0 10px rgba(255,0,51,0.4);
+    }
+    button {
+        background: linear-gradient(45deg, #ff0033, #ff0055);
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        letter-spacing: 0.5px;
+    }
+    button:hover {
+        background: linear-gradient(45deg, #1ebe5d, #21d06a);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    .leaderboard {
+        background: rgba(255,255,255,0.05);
+        padding: 10px;
+        font-size: 14px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        color: #ccc;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        max-height: 150px;
+        overflow-y: auto;
+        animation: fadeIn 1.2s ease;
+    }
+    .leaderboard h3 {
+        margin: 0 0 5px 0;
+        color: #ff0033;
+        font-size: 15px;
+        text-align: center;
+    }
+    .leaderboard ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .leaderboard li {
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="form-container">
+    <h2>🚀 Fixa Unban & Tinjau</h2>
+    <form id="unbanForm">
+        <label for="banType">Jenis Layanan</label>
+        <select id="banType" name="ban_type" required>
+            <option value="">-- Pilih Layanan --</option>
+            <option value="wa_permanen">WhatsApp Permanen</option>
+            <option value="wa_kenon">WhatsApp Kenon</option>
+            <option value="tg_ban">Telegram Ban</option>
+            <option value="ff_tinjau">Free Fire Ban</option>
+        </select>
+
+        <div id="waField" style="display:none;">
+            <label>Nomor WA</label>
+            <div class="phone-input">
+                <span>+62</span>
+                <input type="number" id="phone" name="phone_number" placeholder="815xxxxxxx">
+            </div>
+        </div>
+
+        <div id="tgField" style="display:none;">
+            <label>Username Telegram</label>
+            <input type="text" id="tgUsername" name="tg_username" placeholder="@username">
+        </div>
+
+        <div id="ffField" style="display:none;">
+            <label>ID Player Free Fire</label>
+            <input type="number" id="ffId" name="ff_id" placeholder="123456789">
+        </div>
+
+        <input type="hidden" name="message" id="message">
+
+        <button type="submit">Kirim</button>
+    </form>
+
+    <!-- Tambahan teks peringatan -->
+    <p style="margin-top: 12px; font-size: 0.8em; color: #ff0033; text-align: center;">
+        ⚠️ Proses ini hanya <b>tinjau/minta bantuan</b>, tidak menjamin 100% berhasil.
+    </p>
+</div>
+
+<div class="leaderboard">
+    <h3>⚠️PERINGATAN!</h3>
+    <h3>JANGAN SPAM KIRIM</h3>
+    <h3>CUKUP SEKALI 24JAM</h3>
+    <h3>KALO MASIH NGEYEL AKUN ANDA TIDAK AKAN PERNAH PULIH</h3>
+</div>
+
+<script>
+    (function(){ emailjs.init("l-syQwR352jZCQ-1D"); })();
+
+    const banTypeSelect = document.getElementById("banType");
+    const waField = document.getElementById("waField");
+    const tgField = document.getElementById("tgField");
+    const ffField = document.getElementById("ffField");
+
+    banTypeSelect.addEventListener("change", () => {
+        waField.style.display = banTypeSelect.value.includes("wa") ? "block" : "none";
+        tgField.style.display = banTypeSelect.value.includes("tg") ? "block" : "none";
+        ffField.style.display = banTypeSelect.value === "ff_tinjau" ? "block" : "none";
+    });
+
+    document.getElementById('unbanForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let banType = banTypeSelect.value;
+        let messageText = "";
+
+        if (banType === "wa_permanen" || banType === "wa_kenon") {
+            let phone = document.getElementById("phone").value.trim();
+            if (!phone.startsWith("8")) {
+                alert("Nomor harus dimulai dengan 8 setelah +62");
+                return;
+            }
+            let fullNumber = "+62" + phone;
+            messageText = banType === "wa_permanen" 
+                ? `Halo tim WhatsApp,
+Mohon bantuannya untuk meninjau kembali nomor saya ${fullNumber} yang terkena banned permanen.
+Saya tidak pernah menggunakan aplikasi modifikasi, spam, atau melakukan pelanggaran kebijakan WhatsApp.
+Dugaan saya, nomor saya terkena dampak dari pihak lain yang menggunakan aplikasi pihak ketiga untuk menyerang akun saya.
+Saya sangat mengandalkan WhatsApp untuk berkomunikasi dengan keluarga dan urusan pekerjaan.
+Mohon peninjauan dan pembukaan kembali nomor saya. Terima kasih banyak.`
+                : `Halo tim WhatsApp,
+Mohon bantuannya untuk meninjau kembali nomor saya ${fullNumber} yang terkena banned dengan alasan spam.
+Saya tidak pernah melakukan spam, mengirim pesan massal, atau menggunakan aplikasi pihak ketiga.
+Nomor ini saya gunakan hanya untuk komunikasi pribadi dan pekerjaan sehari-hari.
+Kemungkinan ada kesalahan sistem yang mengira aktivitas saya sebagai spam.
+Mohon tinjauan dan pembukaan kembali nomor saya. Terima kasih atas kerja samanya.`;
+        } else if (banType === "tg_ban") {
+            let username = document.getElementById("tgUsername").value.trim();
+            if (!username.startsWith("@")) {
+                alert("Username Telegram harus diawali dengan @");
+                return;
+            }
+            messageText = `Halo tim Telegram,
+Mohon bantuannya untuk meninjau kembali akun saya ${username} yang baru saja diblokir.
+Saya tidak pernah mengirim spam, menggunakan bot ilegal, atau melanggar aturan Telegram.
+Akun ini saya gunakan hanya untuk komunikasi pribadi dan pekerjaan.
+Kemungkinan terjadi kesalahan sistem atau laporan yang tidak benar.
+Mohon peninjauan ulang dan pemulihan akun saya secepatnya.
+Terima kasih banyak atas perhatian dan bantuannya.`;
+        } else if (banType === "ff_tinjau") {
+            let ffId = document.getElementById("ffId").value.trim();
+            if (ffId.length < 6) {
+                alert("ID Player Free Fire tidak valid!");
+                return;
+            }
+            messageText = `Halo tim Garena Free Fire,
+Mohon bantuannya untuk meninjau kembali akun saya dengan ID: ${ffId} yang terkena banned.
+Saya tidak pernah menggunakan cheat, mod, atau aplikasi pihak ketiga yang melanggar aturan Garena.
+Akun ini saya gunakan hanya untuk bermain secara normal dan fair play.
+Kemungkinan terjadi kesalahan sistem atau akun saya terdampak dari pihak lain yang menggunakan aplikasi ilegal.
+Mohon peninjauan ulang dan pembukaan kembali akun saya. Terima kasih banyak atas perhatian dan bantuannya.`;
+        }
+
+        document.getElementById("message").value = messageText;
+
+        emailjs.sendForm("service_mxpkd0u", "template_phod7ep", this)
+        .then(() => alert("✅ Berhasil Di Kirim,Tunggu 24Jam."))
+        .catch(error => alert("❌ Gagal kirim: " + JSON.stringify(error)));
+    });
+
+    // Particle animation
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+    const numberOfParticles = 100;
+    const colors = ["#fff", "#eee", "#ff3366", "#ff6699"];
+
+    class Particle {
+        constructor(){
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 3 + 1;
+            this.speedX = (Math.random() - 0.5) * 1.5;
+            this.speedY = (Math.random() - 0.5) * 1.5;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+        update(){
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw(){
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = this.color;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init(){
+        particlesArray = [];
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+
+    function animate(){
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+        particlesArray.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+</script>
+
+</body>
+</html>

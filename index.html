@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login dengan Key — Firebase</title>
+<style>
+  :root{
+    --bg:#050505;
+    --card:#0b0b0b;
+    --accent:#ff0033;
+    --text:#eee;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, Arial;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  canvas#particles{
+    position:fixed;
+    inset:0;
+    z-index:0;
+  }
+  .card{
+    background:rgba(255,255,255,0.02);
+    padding:28px;
+    border-radius:14px;
+    box-shadow:0 0 30px rgba(255,0,51,0.4);
+    width:360px;
+    position:relative;
+    z-index:1;
+    animation:fadeInUp 1s ease, floaty 4s ease-in-out infinite;
+  }
+  @keyframes fadeInUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes floaty{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-6px)}
+  }
+  h1{
+    font-size:20px;
+    margin-bottom:8px;
+    text-align:center;
+    color:var(--accent);
+    text-shadow:0 0 8px var(--accent);
+  }
+  p.desc{
+    font-size:13px;
+    margin-top:0;
+    margin-bottom:18px;
+    text-align:center;
+    opacity:0.8;
+  }
+  .form{
+    display:flex;
+    gap:10px;
+  }
+  input[type=text]{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:transparent;
+    color:var(--text);
+    outline:none;
+    box-shadow:0 0 6px rgba(255,0,51,0.2);
+    transition:all 0.3s;
+  }
+  input[type=text]:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 12px var(--accent);
+  }
+  button{
+    padding:12px 14px;
+    border-radius:8px;
+    border:none;
+    background:var(--accent);
+    color:white;
+    cursor:pointer;
+    transition:all 0.3s;
+    box-shadow:0 0 10px var(--accent);
+  }
+  button:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 18px var(--accent);
+  }
+  .help{
+    font-size:12px;
+    margin-top:12px;
+    color:rgba(255,255,255,0.7);
+    text-align:center;
+  }
+  .modal-wrap{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.5);
+    z-index:999;
+  }
+  .modal{
+    background:var(--card);
+    padding:20px;
+    border-radius:12px;
+    min-width:300px;
+    text-align:center;
+    box-shadow:0 0 20px var(--accent);
+    animation:fadeInUp 0.5s ease;
+  }
+  .modal h2{
+    margin:0 0 8px;
+    color:var(--accent);
+  }
+  .modal p{
+    margin:6px 0;
+  }
+  .close-btn{
+    margin-top:12px;
+    padding:8px 12px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:transparent;
+    color:var(--text);
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .close-btn:hover{
+    border-color:var(--accent);
+    box-shadow:0 0 10px var(--accent);
+  }
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+
+<div class="card">
+  <h1>Login — Masukkan Key</h1>
+  <p class="desc">Masukkan key yang kamu punya. Jika Berhasil akan muncul popup informasi expire / sisa hari.</p>
+  <div class="form">
+    <input id="keyInput" type="text" placeholder="Masukan Key Anda" />
+    <button id="btnCheck">Masuk</button>
+  </div>
+  <p class="help">Pastikan Anda Telah Membeli Key</code></p>
+</div>
+
+<div id="modalWrap" class="modal-wrap" role="dialog" aria-hidden="true">
+  <div class="modal">
+    <h2 id="modalTitle">Sukses</h2>
+    <p id="modalMessage">Key Sukses. Sisa: 3 hari</p>
+    <button id="modalClose" class="close-btn">Tutup</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getDatabase, ref, child, get, update } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyChvZvL-K5zABEewOV_x9yc5ToPo62Rhoo",
+    authDomain: "fixashop-517cb.firebaseapp.com",
+    databaseURL: "https://fixashop-517cb-default-rtdb.firebaseio.com",
+    projectId: "fixashop-517cb",
+    storageBucket: "fixashop-517cb.appspot.com",
+    messagingSenderId: "591165951570",
+    appId: "1:591165951570:web:b51bb6ae49c82bfb55d98b",
+    measurementId: "G-328DSSFCFK"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const keyInput = document.getElementById('keyInput');
+  const btnCheck = document.getElementById('btnCheck');
+  const modalWrap = document.getElementById('modalWrap');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalMessage = document.getElementById('modalMessage');
+  const modalClose = document.getElementById('modalClose');
+
+  let redirectAfterClose = false;
+
+  function showModal(title, message, redirect = false){
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    redirectAfterClose = redirect;
+    modalWrap.style.display = 'flex';
+    modalWrap.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeModal(){
+    modalWrap.style.display = 'none';
+    modalWrap.setAttribute('aria-hidden', 'true');
+    if(redirectAfterClose){
+      window.location.href = "menu.html";
+    }
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalWrap.addEventListener('click', (e)=>{ if(e.target===modalWrap) closeModal(); });
+
+  function getDeviceId(){
+    let id = localStorage.getItem('deviceId');
+    if(!id){
+      id = 'dev-' + Math.random().toString(36).substr(2,9);
+      localStorage.setItem('deviceId', id);
+    }
+    return id;
+  }
+
+  async function checkKey(key){
+    if(!key) return showModal('Error','Masukkan key terlebih dahulu.');
+    if(!key.startsWith("FIXA-UNBAN-")){
+      key = "FIXA-UNBAN-" + key;
+    }
+    try{
+      const dbRef = ref(db);
+      const snapshot = await get(child(dbRef, `keys/${key}`));
+      if(!snapshot.exists()) return showModal('Gagal','Key tidak ditemukan.');
+
+      const data = snapshot.val();
+      const now = Date.now();
+      const expires = Number(data.expires) || 0;
+      const active = data.active === undefined ? true : !!data.active;
+      const maxDevices = Number(data.maxDevices) || 1;
+      const devices = Array.isArray(data.devices) ? data.devices : [];
+
+      if(!active) return showModal('Gagal','Key dinonaktifkan oleh admin.');
+      if(expires && now > expires) return showModal('Expired','Key sudah kedaluwarsa.');
+
+      const deviceId = getDeviceId();
+      if(!devices.includes(deviceId)){
+        if(devices.length >= maxDevices){
+          return showModal('Gagal','Batas perangkat tercapai untuk key ini.');
+        }
+        devices.push(deviceId);
+        await update(ref(db, `keys/${key}`), { devices });
+      }
+
+      let extra = '';
+      if(expires){
+        const diffMs = expires - now;
+        const days = Math.floor(diffMs / (1000*60*60*24));
+        const hours = Math.floor((diffMs % (1000*60*60*24)) / (1000*60*60));
+        extra = `Sisa: ${days} hari ${hours} jam.`;
+      }
+
+      localStorage.setItem('userKey', key);
+      showModal('Sukses', `Key Berhasil. ${extra}`, true);
+
+    }catch(err){
+      console.error("Firebase error:", err);
+      showModal('Error','Terjadi kesalahan koneksi ke Firebase.');
+    }
+  }
+
+  btnCheck.addEventListener('click', ()=>{
+    const key = keyInput.value.trim();
+    checkKey(key);
+  });
+  keyInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') btnCheck.click();
+  });
+
+  // Particles background
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let w,h;
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function initParticles(){
+    particles = [];
+    for(let i=0;i<80;i++){
+      particles.push({
+        x:Math.random()*w,
+        y:Math.random()*h,
+        r:Math.random()*2+1,
+        dx:(Math.random()-0.5)*0.5,
+        dy:(Math.random()-0.5)*0.5
+      });
+    }
+  }
+  function drawParticles(){
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(255,0,51,0.8)';
+    particles.forEach(p=>{
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if(p.x<0||p.x>w) p.dx*=-1;
+      if(p.y<0||p.y>h) p.dy*=-1;
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  initParticles();
+  drawParticles();
+</script>
+</body>
+</html>
