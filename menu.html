@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Form Unban WA, Telegram & Free Fire</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Form Unban WA, Telegram & Free Fire & Sosmed</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <style>
     body {
@@ -18,81 +18,62 @@
         height: 100vh;
         overflow: hidden;
     }
-    canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: -1;
-    }
+    canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
     .form-container {
-        background: rgba(30, 30, 30, 0.85);
+        background: rgba(30,30,30,0.9);
         backdrop-filter: blur(10px);
         padding: 25px 20px;
         border-radius: 15px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-        width: 340px;
-        animation: slideFadeIn 1s ease;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        width: 360px;
+        animation: slideFadeIn 0.9s ease;
+        border: 1px solid rgba(255,255,255,0.06);
     }
-    @keyframes slideFadeIn {
-        from {opacity: 0; transform: translateY(40px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
-    h2 {
-        text-align: center;
-        margin-bottom: 15px;
-        font-size: 1.6em;
-        color: #ff0033;
-        letter-spacing: 1px;
-    }
-    label {
-        font-size: 0.9em;
-        color: #ccc;
-    }
-    .phone-input {
-        display: flex;
-        align-items: center;
-    }
+    @keyframes slideFadeIn { from {opacity:0; transform:translateY(40px);} to {opacity:1; transform:translateY(0);} }
+    h2 { text-align:center; margin-bottom:12px; font-size:1.5em; color:#ff0033; letter-spacing:1px; }
+    label { font-size:0.9em; color:#ccc; display:block; margin-bottom:6px; }
+    .phone-input { display:flex; align-items:center; }
     .phone-input span {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 10px;
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: #ff0033;
-        font-weight: bold;
+        background: rgba(255,255,255,0.05);
+        padding:10px;
+        border-top-left-radius:6px;
+        border-bottom-left-radius:6px;
+        border:1px solid rgba(255,255,255,0.08);
+        color:#ff0033;
+        font-weight:bold;
     }
-    input, select, button {
-        width: 100%;
-        padding: 11px;
-        margin: 6px 0 14px;
-        border-radius: 6px;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-        font-size: 0.95em;
-        transition: all 0.3s ease;
+    input, select, button, textarea {
+        width:100%;
+        padding:10px;
+        margin:6px 0 12px;
+        border-radius:6px;
+        border:1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        color:white;
+        font-size:0.95em;
+        transition: all 0.25s ease;
     }
-    input:focus, select:focus {
-        outline: none;
-        border-color: #ff0033;
-        box-shadow: 0 0 10px rgba(255,0,51,0.4);
+    input:focus, select:focus, textarea:focus {
+        outline:none;
+        border-color:#ff0033;
+        box-shadow:0 0 10px rgba(255,0,51,0.18);
     }
     button {
         background: linear-gradient(45deg, #ff0033, #ff0055);
         border: none;
         cursor: pointer;
         font-weight: bold;
-        transition: 0.3s;
-        letter-spacing: 0.5px;
+        padding: 12px;
+        letter-spacing: 0.6px;
     }
     button:hover {
         background: linear-gradient(45deg, #1ebe5d, #21d06a);
         transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.35);
     }
     .leaderboard {
-        background: rgba(255,255,255,0.05);
+        background: rgba(255,255,255,0.03);
         padding: 10px;
         font-size: 14px;
         position: fixed;
@@ -104,25 +85,9 @@
         overflow-y: auto;
         animation: fadeIn 1.2s ease;
     }
-    .leaderboard h3 {
-        margin: 0 0 5px 0;
-        color: #ff0033;
-        font-size: 15px;
-        text-align: center;
-    }
-    .leaderboard ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    .leaderboard li {
-        padding: 3px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    @keyframes fadeIn {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    }
+    .leaderboard h3 { margin: 4px 0; color: #ff0033; font-size: 14px; text-align:center; }
+    .small-note { font-size:0.82em; color:#ff7b9a; text-align:center; margin-top:8px; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 </style>
 </head>
 <body>
@@ -139,136 +104,225 @@
             <option value="wa_kenon">WhatsApp Kenon</option>
             <option value="tg_ban">Telegram Ban</option>
             <option value="ff_tinjau">Free Fire Ban</option>
+
+            <!-- Sosial media tambahan -->
+            <option value="fb_ban">Facebook Ban</option>
+            <option value="tt_ban">TikTok Ban</option>
+            <option value="dc_ban">Discord Ban</option>
+            <option value="ig_ban">Instagram Ban</option>
         </select>
 
+        <!-- WA field -->
         <div id="waField" style="display:none;">
             <label>Nomor WA</label>
             <div class="phone-input">
                 <span>+62</span>
-                <input type="number" id="phone" name="phone_number" placeholder="815xxxxxxx">
+                <input type="tel" id="phone" name="phone_number" placeholder="815xxxxxxx">
             </div>
         </div>
 
+        <!-- Telegram -->
         <div id="tgField" style="display:none;">
             <label>Username Telegram</label>
             <input type="text" id="tgUsername" name="tg_username" placeholder="@username">
         </div>
 
+        <!-- Free Fire -->
         <div id="ffField" style="display:none;">
             <label>ID Player Free Fire</label>
-            <input type="number" id="ffId" name="ff_id" placeholder="123456789">
+            <input type="text" id="ffId" name="ff_id" placeholder="123456789">
+
+            <label>Jenis Masalah Akun</label>
+            <select id="ffAccountType" name="ff_account_type">
+                <option value="">-- Pilih Jenis Akun --</option>
+                <option value="akun_utama">Akun Kena Ban Permanen</option>
+                <option value="akun_smurf">Akun Kena Blacklist / Smurf</option>
+            </select>
         </div>
+
+        <!-- Facebook -->
+        <div id="fbField" style="display:none;">
+            <label>Nama / Email / ID Facebook</label>
+            <input type="text" id="fbName" name="fb_name" placeholder="Nama / email / id (contoh: nama@gmail.com)">
+        </div>
+
+        <!-- TikTok -->
+        <div id="ttField" style="display:none;">
+            <label>Username TikTok</label>
+            <input type="text" id="ttUsername" name="tt_username" placeholder="@username">
+        </div>
+
+        <!-- Discord -->
+        <div id="dcField" style="display:none;">
+            <label>Username Discord (contoh: User#1234)</label>
+            <input type="text" id="dcUsername" name="dc_username" placeholder="User#1234">
+        </div>
+
+        <!-- Instagram -->
+        <div id="igField" style="display:none;">
+            <label>Username Instagram</label>
+            <input type="text" id="igUsername" name="ig_username" placeholder="@username">
+        </div>
+
+        <label>Tambahan (optional)</label>
+        <textarea id="extraNote" name="extra_note" rows="3" placeholder="Ceritakan kronologi singkat (opsional)"></textarea>
 
         <input type="hidden" name="message" id="message">
 
         <button type="submit">Kirim</button>
     </form>
 
-    <!-- Tambahan teks peringatan -->
-    <p style="margin-top: 12px; font-size: 0.8em; color: #ff0033; text-align: center;">
-        ⚠️ Proses ini hanya <b>tinjau/minta bantuan</b>, tidak menjamin 100% berhasil.
-    </p>
+    <p class="small-note">⚠️ Proses ini hanya <b>tinjau/minta bantuan</b>, tidak menjamin 100% berhasil.</p>
 </div>
 
 <div class="leaderboard">
-    <h3>⚠️PERINGATAN!</h3>
+    <h3>⚠️ PERINGATAN!</h3>
     <h3>JANGAN SPAM KIRIM</h3>
-    <h3>CUKUP SEKALI 24JAM</h3>
+    <h3>CUKUP SEKALI 24 JAM</h3>
     <h3>KALO MASIH NGEYEL AKUN ANDA TIDAK AKAN PERNAH PULIH</h3>
 </div>
 
 <script>
+    // Inisialisasi EmailJS - ganti ID kalau perlu
     (function(){ emailjs.init("l-syQwR352jZCQ-1D"); })();
 
     const banTypeSelect = document.getElementById("banType");
     const waField = document.getElementById("waField");
     const tgField = document.getElementById("tgField");
     const ffField = document.getElementById("ffField");
+    const fbField = document.getElementById("fbField");
+    const ttField = document.getElementById("ttField");
+    const dcField = document.getElementById("dcField");
+    const igField = document.getElementById("igField");
+
+    function hideAll() {
+        waField.style.display = "none";
+        tgField.style.display = "none";
+        ffField.style.display = "none";
+        fbField.style.display = "none";
+        ttField.style.display = "none";
+        dcField.style.display = "none";
+        igField.style.display = "none";
+    }
 
     banTypeSelect.addEventListener("change", () => {
-        waField.style.display = banTypeSelect.value.includes("wa") ? "block" : "none";
-        tgField.style.display = banTypeSelect.value.includes("tg") ? "block" : "none";
-        ffField.style.display = banTypeSelect.value === "ff_tinjau" ? "block" : "none";
+        hideAll();
+        const v = banTypeSelect.value;
+        if (v.includes("wa")) waField.style.display = "block";
+        else if (v === "tg_ban") tgField.style.display = "block";
+        else if (v === "ff_tinjau") ffField.style.display = "block";
+        else if (v === "fb_ban") fbField.style.display = "block";
+        else if (v === "tt_ban") ttField.style.display = "block";
+        else if (v === "dc_ban") dcField.style.display = "block";
+        else if (v === "ig_ban") igField.style.display = "block";
     });
 
     document.getElementById('unbanForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
         let banType = banTypeSelect.value;
+        if (!banType) { alert("Pilih layanan dulu!"); return; }
+
+        let extra = document.getElementById("extraNote").value.trim();
         let messageText = "";
 
+        // WA handling
         if (banType === "wa_permanen" || banType === "wa_kenon") {
             let phone = document.getElementById("phone").value.trim();
+            if (!phone) { alert("Masukkan nomor WA!"); return; }
+            // validasi sederhana: harus mulai dengan 8 setelah +62
             if (!phone.startsWith("8")) {
                 alert("Nomor harus dimulai dengan 8 setelah +62");
                 return;
             }
             let fullNumber = "+62" + phone;
-            messageText = banType === "wa_permanen" 
-                ? `Halo tim WhatsApp,
-Mohon bantuannya untuk meninjau kembali nomor saya ${fullNumber} yang terkena banned permanen.
-Saya tidak pernah menggunakan aplikasi modifikasi, spam, atau melakukan pelanggaran kebijakan WhatsApp.
-Dugaan saya, nomor saya terkena dampak dari pihak lain yang menggunakan aplikasi pihak ketiga untuk menyerang akun saya.
-Saya sangat mengandalkan WhatsApp untuk berkomunikasi dengan keluarga dan urusan pekerjaan.
-Mohon peninjauan dan pembukaan kembali nomor saya. Terima kasih banyak.`
-                : `Halo tim WhatsApp,
-Mohon bantuannya untuk meninjau kembali nomor saya ${fullNumber} yang terkena banned dengan alasan spam.
-Saya tidak pernah melakukan spam, mengirim pesan massal, atau menggunakan aplikasi pihak ketiga.
-Nomor ini saya gunakan hanya untuk komunikasi pribadi dan pekerjaan sehari-hari.
-Kemungkinan ada kesalahan sistem yang mengira aktivitas saya sebagai spam.
-Mohon tinjauan dan pembukaan kembali nomor saya. Terima kasih atas kerja samanya.`;
-        } else if (banType === "tg_ban") {
+            messageText = banType === "wa_permanen"
+                ? `Halo tim WhatsApp,\nMohon bantuannya untuk meninjau kembali nomor saya ${fullNumber} yang terkena banned permanen.\nSaya tidak pernah menggunakan aplikasi modifikasi, spam, atau melakukan pelanggaran kebijakan WhatsApp.\nKemungkinan saya menjadi korban pihak ketiga. ${extra ? ("\nKeterangan: " + extra) : ""}\nTerima kasih.`
+                : `Halo tim WhatsApp,\nMohon bantuannya untuk meninjau kembali nomor saya ${fullNumber} yang terkena banned dengan alasan spam.\nSaya tidak melakukan spam atau penggunaan aplikasi pihak ketiga. ${extra ? ("\nKeterangan: " + extra) : ""}\nTerima kasih.`;
+        }
+
+        // Telegram
+        else if (banType === "tg_ban") {
             let username = document.getElementById("tgUsername").value.trim();
+            if (!username) { alert("Masukkan username Telegram!"); return; }
             if (!username.startsWith("@")) {
                 alert("Username Telegram harus diawali dengan @");
                 return;
             }
-            messageText = `Halo tim Telegram,
-Mohon bantuannya untuk meninjau kembali akun saya ${username} yang baru saja diblokir.
-Saya tidak pernah mengirim spam, menggunakan bot ilegal, atau melanggar aturan Telegram.
-Akun ini saya gunakan hanya untuk komunikasi pribadi dan pekerjaan.
-Kemungkinan terjadi kesalahan sistem atau laporan yang tidak benar.
-Mohon peninjauan ulang dan pemulihan akun saya secepatnya.
-Terima kasih banyak atas perhatian dan bantuannya.`;
-        } else if (banType === "ff_tinjau") {
+            messageText = `Halo tim Telegram,\nMohon tinjau akun ${username} yang diblokir. Saya tidak melakukan spam atau pelanggaran.\n${extra ? ("Keterangan: " + extra + "\n") : ""}Terima kasih.`;
+        }
+
+        // Free Fire
+        else if (banType === "ff_tinjau") {
             let ffId = document.getElementById("ffId").value.trim();
-            if (ffId.length < 6) {
-                alert("ID Player Free Fire tidak valid!");
-                return;
-            }
-            messageText = `Halo tim Garena Free Fire,
-Mohon bantuannya untuk meninjau kembali akun saya dengan ID: ${ffId} yang terkena banned.
-Saya tidak pernah menggunakan cheat, mod, atau aplikasi pihak ketiga yang melanggar aturan Garena.
-Akun ini saya gunakan hanya untuk bermain secara normal dan fair play.
-Kemungkinan terjadi kesalahan sistem atau akun saya terdampak dari pihak lain yang menggunakan aplikasi ilegal.
-Mohon peninjauan ulang dan pembukaan kembali akun saya. Terima kasih banyak atas perhatian dan bantuannya.`;
+            let ffAccountType = document.getElementById("ffAccountType").value.trim();
+            if (!ffId) { alert("Masukkan ID Free Fire!"); return; }
+            if (ffId.length < 5) { alert("ID Player Free Fire tidak valid!"); return; }
+            if (!ffAccountType) { alert("Pilih jenis akun Free Fire!"); return; }
+            messageText = `Halo tim Garena Free Fire,\nMohon tinjau akun saya ID: ${ffId} (${ffAccountType}). Saya tidak menggunakan cheat/mod.\n${extra ? ("Keterangan: " + extra + "\n") : ""}Mohon pemulihan akun. Terima kasih.`;
+        }
+
+        // Facebook
+        else if (banType === "fb_ban") {
+            let fb = document.getElementById("fbName").value.trim();
+            if (!fb) { alert("Masukkan nama/email/ID Facebook!"); return; }
+            messageText = `Halo tim Facebook,\nMohon tinjau akun terkait: ${fb} yang terkena pembatasan/penangguhan.\nSaya tidak melakukan pelanggaran dan berharap ada peninjauan ulang.\n${extra ? ("Keterangan: " + extra + "\n") : ""}Terima kasih.`;
+        }
+
+        // TikTok
+        else if (banType === "tt_ban") {
+            let tt = document.getElementById("ttUsername").value.trim();
+            if (!tt) { alert("Masukkan username TikTok!"); return; }
+            if (!tt.startsWith("@")) { alert("Username TikTok sebaiknya diawali @"); return; }
+            messageText = `Halo tim TikTok,\nMohon tinjau akun ${tt} yang terkena pembatasan/penangguhan.\nSaya tidak melanggar aturan komunitas. ${extra ? ("\nKeterangan: " + extra) : ""}\nTerima kasih.`;
+        }
+
+        // Discord
+        else if (banType === "dc_ban") {
+            let dc = document.getElementById("dcUsername").value.trim();
+            if (!dc) { alert("Masukkan username Discord!"); return; }
+            // validasi sederhana: harus ada '#'
+            if (!dc.includes("#")) { alert("Format Discord harus seperti User#1234"); return; }
+            messageText = `Halo tim Discord,\nMohon tinjau akun ${dc} yang terkena pembatasan/ban.\nSaya tidak melakukan tindakan yang melanggar. ${extra ? ("\nKeterangan: " + extra) : ""}\nTerima kasih.`;
+        }
+
+        // Instagram
+        else if (banType === "ig_ban") {
+            let ig = document.getElementById("igUsername").value.trim();
+            if (!ig) { alert("Masukkan username Instagram!"); return; }
+            if (!ig.startsWith("@")) { alert("Username Instagram sebaiknya diawali @"); return; }
+            messageText = `Halo tim Instagram,\nMohon tinjau akun ${ig} yang terkena pembatasan/penangguhan.\nSaya tidak melakukan pelanggaran. ${extra ? ("\nKeterangan: " + extra) : ""}\nTerima kasih.`;
         }
 
         document.getElementById("message").value = messageText;
 
+        // Kirim via EmailJS
         emailjs.sendForm("service_mxpkd0u", "template_phod7ep", this)
-        .then(() => alert("✅ Berhasil Di Kirim,Tunggu 24Jam."))
-        .catch(error => alert("❌ Gagal kirim: " + JSON.stringify(error)));
+        .then(() => alert("✅ Berhasil dikirim. Tunggu balasan (biasanya 24-72 jam)."))
+        .catch(error => {
+            console.error(error);
+            alert("❌ Gagal kirim: " + (error.text || JSON.stringify(error)));
+        });
     });
 
-    // Particle animation
+    // Simple particle animation (sama kayak sebelumnya)
     const canvas = document.getElementById("particles");
     const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
     let particlesArray = [];
-    const numberOfParticles = 100;
-    const colors = ["#fff", "#eee", "#ff3366", "#ff6699"];
-
+    const numberOfParticles = 80;
+    const colors = ["#fff","#eee","#ff3366","#ff6699"];
     class Particle {
         constructor(){
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 3 + 1;
-            this.speedX = (Math.random() - 0.5) * 1.5;
-            this.speedY = (Math.random() - 0.5) * 1.5;
-            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.size = Math.random()*3 + 0.8;
+            this.speedX = (Math.random()-0.5) * 1.2;
+            this.speedY = (Math.random()-0.5) * 1.2;
+            this.color = colors[Math.floor(Math.random()*colors.length)];
         }
         update(){
             this.x += this.speedX;
@@ -277,31 +331,18 @@ Mohon peninjauan ulang dan pembukaan kembali akun saya. Terima kasih banyak atas
             if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
         }
         draw(){
-            ctx.shadowBlur = 15;
+            ctx.shadowBlur = 10;
             ctx.shadowColor = this.color;
             ctx.fillStyle = this.color;
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
             ctx.fill();
         }
     }
-
-    function init(){
-        particlesArray = [];
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
-    }
-
-    function animate(){
-        ctx.clearRect(0,0,canvas.width, canvas.height);
-        particlesArray.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(animate);
-    }
-
-    init();
-    animate();
+    function init(){ particlesArray = []; for (let i=0;i<numberOfParticles;i++) particlesArray.push(new Particle()); }
+    function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); particlesArray.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animate); }
+    init(); animate();
 </script>
 
 </body>
-</html>
+    </html>
